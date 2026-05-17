@@ -39,7 +39,7 @@ Mask R-CNN modelimiz, dental veri setlerinde sıkça karşılaşılan dengesiz s
 Tıbbi bir yapay zeka sadece ne bulduğuyla değil, **neye dokunmadığıyla (neyi görmezden geldiğiyle)** da değerlendirilmelidir. Aşağıda modelimizin gerçek hasta verisi üzerindeki kritik bir değerlendirmesi bulunmaktadır.
 
 #### Vaka İncelemesi: Yüksek Hassasiyetli Tespit (Dentex 486)
-<img src="test_results/dentex_486_inference.jpg" width="700">
+<img src="test_results/dashboard_486.png" width="900">
 
 **Analiz:** Bu net panoramik röntgende, model **uzman hekim seviyesinde** bir doğruluk sergilemektedir.
 - Sağ alt kanin (#43) dişindeki **Periapikal Lezyonu** **%86.4 güven skoruyla** kusursuzca bölütlemiştir (pembe maske).
@@ -109,7 +109,7 @@ Our Mask R-CNN model was rigorously trained with a customized loss function to h
 A medical AI must be evaluated not only on what it finds, but also on **what it chooses to ignore**. Below is a critical evaluation of our model's performance on real patient data.
 
 #### Case Study: High-Precision Detection (Dentex 486)
-<img src="test_results/dentex_486_inference.jpg" width="700">
+<img src="test_results/dashboard_486.png" width="900">
 
 **Analysis:** In this clear panoramic X-ray, the model demonstrates **human-expert level accuracy**. 
 - It successfully segmented a **Periapical Lesion** on the lower right canine (#43) with **86.4% confidence**.
