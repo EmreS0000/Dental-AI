@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  dental-ai:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/models:/app/backend/models
+      - ./backend/uploads:/app/backend/uploads
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped

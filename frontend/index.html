@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🦷 Dental AI v2 - Akıllı Diş Analiz Sistemi</title>
+    <meta name="description" content="Yapay zeka destekli dental röntgen analiz sistemi - Hastalık tespiti, diş haritası ve tedavi önerisi">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <!-- Header -->
+    <header id="main-header">
+        <div class="header-left">
+            <div class="logo">
+                <span class="logo-icon">🦷</span>
+                <div>
+                    <h1>Dental AI <span class="version-badge">v2</span></h1>
+                    <p class="subtitle">Akıllı Diş Analiz Sistemi</p>
+                </div>
+            </div>
+        </div>
+        <div class="header-right">
+            <div class="status-indicator" id="model-status">
+                <span class="status-dot"></span>
+                <span class="status-text">Model Bekleniyor</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="app-main">
+        <!-- Upload Section -->
+        <section id="upload-section" class="glass-card">
+            <div class="upload-area" id="upload-area">
+                <div class="upload-icon">📤</div>
+                <h2>Dental Röntgen Yükle</h2>
+                <p>Panoramik röntgen görselinizi sürükleyip bırakın veya seçin</p>
+                <p class="upload-hint">JPEG, PNG formatları desteklenir</p>
+                <input type="file" id="file-input" accept="image/jpeg,image/png,image/bmp" hidden>
+                <button class="btn btn-primary" id="upload-btn">Dosya Seç</button>
+            </div>
+            <div class="upload-preview" id="upload-preview" style="display:none;">
+                <img id="preview-image" alt="Röntgen önizleme">
+                <div class="preview-actions">
+                    <button class="btn btn-primary" id="analyze-btn">🔬 Analiz Et</button>
+                    <button class="btn btn-ghost" id="clear-btn">✕ Temizle</button>
+                </div>
+            </div>
+            <!-- Loading -->
+            <div class="loading-overlay" id="loading-overlay" style="display:none;">
+                <div class="spinner"></div>
+                <p>Analiz yapılıyor...</p>
+            </div>
+        </section>
+
+        <!-- Results Section (hidden until analysis) -->
+        <section id="results-section" style="display:none;">
+            <!-- Summary Bar -->
+            <div class="summary-bar glass-card" id="summary-bar">
+                <div class="summary-stat">
+                    <span class="stat-value" id="stat-findings">0</span>
+                    <span class="stat-label">Toplam Bulgu</span>
+                </div>
+                <div class="summary-stat">
+                    <span class="stat-value" id="stat-teeth">0</span>
+                    <span class="stat-label">Etkilenen Diş</span>
+                </div>
+                <div class="summary-stat warning">
+                    <span class="stat-value" id="stat-priority">0</span>
+                    <span class="stat-label">Yüksek Öncelik</span>
+                </div>
+            </div>
+
+            <!-- Two Column Layout -->
+            <div class="results-grid">
+                <!-- Left: Visualization -->
+                <div class="result-col">
+                    <div class="glass-card">
+                        <h3 class="card-title">📷 Analiz Görseli</h3>
+                        <div class="vis-container" id="vis-container">
+                            <img id="vis-image" alt="Analiz sonucu">
+                        </div>
+                    </div>
+
+                    <!-- Tooth Map -->
+                    <div class="glass-card">
+                        <h3 class="card-title">🗺️ Diş Haritası (FDI)</h3>
+                        <div class="tooth-map-container">
+                            <div class="jaw-label">ÜST ÇENE</div>
+                            <div class="tooth-row upper">
+                                <div class="quadrant right">
+                                    <div class="quadrant-label">Q1 - Sağ Üst</div>
+                                    <div class="teeth-group">
+                                        <div class="tooth" data-fdi="18" id="tooth-18"><span>18</span></div>
+                                        <div class="tooth" data-fdi="17" id="tooth-17"><span>17</span></div>
+                                        <div class="tooth" data-fdi="16" id="tooth-16"><span>16</span></div>
+                                        <div class="tooth" data-fdi="15" id="tooth-15"><span>15</span></div>
+                                        <div class="tooth" data-fdi="14" id="tooth-14"><span>14</span></div>
+                                        <div class="tooth" data-fdi="13" id="tooth-13"><span>13</span></div>
+                                        <div class="tooth" data-fdi="12" id="tooth-12"><span>12</span></div>
+                                        <div class="tooth" data-fdi="11" id="tooth-11"><span>11</span></div>
+                                    </div>
+                                </div>
+                                <div class="midline"></div>
+                                <div class="quadrant left">
+                                    <div class="quadrant-label">Q2 - Sol Üst</div>
+                                    <div class="teeth-group">
+                                        <div class="tooth" data-fdi="21" id="tooth-21"><span>21</span></div>
+                                        <div class="tooth" data-fdi="22" id="tooth-22"><span>22</span></div>
+                                        <div class="tooth" data-fdi="23" id="tooth-23"><span>23</span></div>
+                                        <div class="tooth" data-fdi="24" id="tooth-24"><span>24</span></div>
+                                        <div class="tooth" data-fdi="25" id="tooth-25"><span>25</span></div>
+                                        <div class="tooth" data-fdi="26" id="tooth-26"><span>26</span></div>
+                                        <div class="tooth" data-fdi="27" id="tooth-27"><span>27</span></div>
+                                        <div class="tooth" data-fdi="28" id="tooth-28"><span>28</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="jaw-divider"></div>
+                            <div class="tooth-row lower">
+                                <div class="quadrant right">
+                                    <div class="quadrant-label">Q4 - Sağ Alt</div>
+                                    <div class="teeth-group">
+                                        <div class="tooth" data-fdi="48" id="tooth-48"><span>48</span></div>
+                                        <div class="tooth" data-fdi="47" id="tooth-47"><span>47</span></div>
+                                        <div class="tooth" data-fdi="46" id="tooth-46"><span>46</span></div>
+                                        <div class="tooth" data-fdi="45" id="tooth-45"><span>45</span></div>
+                                        <div class="tooth" data-fdi="44" id="tooth-44"><span>44</span></div>
+                                        <div class="tooth" data-fdi="43" id="tooth-43"><span>43</span></div>
+                                        <div class="tooth" data-fdi="42" id="tooth-42"><span>42</span></div>
+                                        <div class="tooth" data-fdi="41" id="tooth-41"><span>41</span></div>
+                                    </div>
+                                </div>
+                                <div class="midline"></div>
+                                <div class="quadrant left">
+                                    <div class="quadrant-label">Q3 - Sol Alt</div>
+                                    <div class="teeth-group">
+                                        <div class="tooth" data-fdi="31" id="tooth-31"><span>31</span></div>
+                                        <div class="tooth" data-fdi="32" id="tooth-32"><span>32</span></div>
+                                        <div class="tooth" data-fdi="33" id="tooth-33"><span>33</span></div>
+                                        <div class="tooth" data-fdi="34" id="tooth-34"><span>34</span></div>
+                                        <div class="tooth" data-fdi="35" id="tooth-35"><span>35</span></div>
+                                        <div class="tooth" data-fdi="36" id="tooth-36"><span>36</span></div>
+                                        <div class="tooth" data-fdi="37" id="tooth-37"><span>37</span></div>
+                                        <div class="tooth" data-fdi="38" id="tooth-38"><span>38</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="jaw-label">ALT ÇENE</div>
+                        </div>
+                        <!-- Legend -->
+                        <div class="legend" id="legend"></div>
+                    </div>
+                </div>
+
+                <!-- Right: Findings & Treatment -->
+                <div class="result-col">
+                    <div class="glass-card">
+                        <h3 class="card-title">📋 Klinik Bulgular ve Tedavi Önerileri</h3>
+                        <div id="findings-list" class="findings-list">
+                            <!-- JS ile doldurulacak -->
+                        </div>
+                    </div>
+
+                    <!-- Disclaimer -->
+                    <div class="glass-card disclaimer-card">
+                        <p>⚠️ Bu rapor yapay zeka destekli ön değerlendirme niteliğindedir. 
+                        Kesin teşhis ve tedavi planı için klinik muayene ve hekim değerlendirmesi şarttır.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
